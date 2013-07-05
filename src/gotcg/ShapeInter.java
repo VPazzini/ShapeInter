@@ -56,7 +56,7 @@ class ShapeInter extends TimerTask {
         width = 500;
         height = 800;
 
-        steps = 50;
+        steps = 107;
 
         deltaAlpha = 1.0 / steps;
 
@@ -461,7 +461,7 @@ class ShapeInter extends TimerTask {
     //the updated image/frame and calls the repaint method to draw the
     //updated image on the window.
     int i = 0;
-
+    int p = 0;
     @Override
     public void run() {
 
@@ -475,13 +475,11 @@ class ShapeInter extends TimerTask {
             //Draw the interpolated image on the BufferedImage.
             buffid.g2dbi.setColor(Color.BLACK);
             buffid.g2dbi.fill(new Rectangle(0, 0, 500, 800));
-            buffid.g2dbi.drawImage(mix, 50, 50, null);
+            buffid.g2dbi.drawImage(mix, points.get(p).x, points.get(p).y, null);
+            //buffid.g2dbi.drawImage(mix, 50, 50, null);
 
             //Call the method for updating the window.
             buffid.repaint();
-
-            //buffid.g2dbi.setColor(Color.BLACK);
-            //buffid.g2dbi.fill(new Rectangle(0, 0, 500, 800));
         } else {
             if (i < 15) {
                 i++;
@@ -492,8 +490,7 @@ class ShapeInter extends TimerTask {
 
         //Increment alpha.
         alpha += deltaAlpha;
-
-
+        p++;
     }
 
     public static void main(String args[]) {
@@ -504,7 +501,7 @@ class ShapeInter extends TimerTask {
         int height = 800;
 
         //Specifies (in milliseconds) when the frame should be updated.
-        int delay = 10;
+        int delay = 1;
 
         //The BufferedImage to be drawn in the window.
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
