@@ -1,2 +1,0 @@
-gotcg.GOTCG
-GOTCG

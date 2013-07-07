@@ -6,6 +6,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A simple example for transforming one triangulated image into another one.
@@ -33,7 +35,7 @@ class ShapeInter extends TimerTask {
     //The second triangulated image.
     //private TriangulatedImage t2;
     //This is used for generating/storing the intermediate images.
-    private BufferedImage mix;
+    private BufferedImage mix1, mix2;
     //A variable which is increased stepwise from 0 to 1. It is needed
     //for the computation of the convex combinations.
     private double alpha;
@@ -51,16 +53,19 @@ class ShapeInter extends TimerTask {
         e.calculateOctant(200, 200, 150);
         points = e.getCompleteList();
 
+
         buffid = bid;
 
         width = 500;
         height = 800;
 
-        steps = 107;
+        steps = 10;
 
         deltaAlpha = 1.0 / steps;
 
         alpha = 0;
+
+        pointsPace = (int) ((int) (points.size() / 16.0) / steps);
 
         //This object is used for loading the two images.
         Image loadedImage;
@@ -462,24 +467,54 @@ class ShapeInter extends TimerTask {
     //updated image on the window.
     int i = 0;
     int p = 0;
+    int x = 0;
+    int pointsPace;
+
     @Override
     public void run() {
-
+        while(true){
         //Since this method is called arbitrarily often, interpolation must only
         //be carred out while alpha is between 0 and 1.
-        if (alpha >= 0 && alpha <= 1) {
+        if (alpha >= 0 && alpha <= 1 - deltaAlpha) {
             //Generate the interpolated image.
 
-            mix = t[i].mixWith(t[i + 1], alpha);
+            mix1 = t[i].mixWith(t[i + 1], alpha);
+            mix2 = t[i].mixWith(t[i + 1], (alpha + deltaAlpha));
 
             //Draw the interpolated image on the BufferedImage.
             buffid.g2dbi.setColor(Color.BLACK);
-            buffid.g2dbi.fill(new Rectangle(0, 0, 500, 800));
-            buffid.g2dbi.drawImage(mix, points.get(p).x, points.get(p).y, null);
-            //buffid.g2dbi.drawImage(mix, 50, 50, null);
+            //buffid.g2dbi.fill(new Rectangle(0, 0, 500, 800));
 
-            //Call the method for updating the window.
-            buffid.repaint();
+            AffineTransform transImg1 = new AffineTransform();
+            AffineTransform transImg2 = new AffineTransform();
+            transImg1.translate(points.get(p).x, points.get(p).y);
+            transImg2.translate(points.get(p + pointsPace).x, points.get(p + pointsPace).y);
+
+            double[] initialMatrix = new double[6];
+            double[] finalMatrix = new double[6];
+            transImg1.getMatrix(initialMatrix);
+            transImg2.getMatrix(finalMatrix);
+
+            //System.out.println(pointsPace + "\n");
+
+            int pace = 50;
+            for (int k = 0; k < pace; k++) {
+                //System.out.println(k + "\n");
+
+                buffid.g2dbi.fillRect(0, 0, width, height);
+
+                AffineTransform intermediateTransform = new AffineTransform(convexCombination(initialMatrix, finalMatrix, k / (double) pace));
+                buffid.g2dbi.drawImage(mix1, intermediateTransform, null);
+                //buffid.g2dbi.drawImage(mix, 50, 50, null);
+
+                //Call the method for updating the window.
+                buffid.repaint();
+                /*try {
+                    Thread.sleep(30);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ShapeInter.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
+            }
         } else {
             if (i < 15) {
                 i++;
@@ -490,7 +525,21 @@ class ShapeInter extends TimerTask {
 
         //Increment alpha.
         alpha += deltaAlpha;
-        p++;
+        p += pointsPace;
+        }
+    }
+
+    private static double[] convexCombination(double[] a, double[] b, double alpha) {
+        double[] result = new double[6];
+
+        result[0] = (1 - alpha) * a[0] + alpha * b[0];
+        result[1] = (1 - alpha) * a[1] + alpha * b[1];
+        result[2] = (1 - alpha) * a[2] + alpha * b[2];
+        result[3] = (1 - alpha) * a[3] + alpha * b[3];
+        result[4] = (1 - alpha) * a[4] + alpha * b[4];
+        result[5] = (1 - alpha) * a[5] + alpha * b[5];
+
+        return result;
     }
 
     public static void main(String args[]) {
@@ -513,10 +562,11 @@ class ShapeInter extends TimerTask {
 
         //The TimerTask in which the repeated computations for drawing take place.
         ShapeInter mcs = new ShapeInter(bid);
+        
+        mcs.run();
 
-
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(mcs, 0, delay);
+        //Timer t = new Timer();
+        //t.scheduleAtFixedRate(mcs, 0, delay);
 
     }
 }
