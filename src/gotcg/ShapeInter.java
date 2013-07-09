@@ -2,7 +2,6 @@ package gotcg;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ class ShapeInter extends TimerTask {
     //The second triangulated image.
     //private TriangulatedImage t2;
     //This is used for generating/storing the intermediate images.
-    private BufferedImage mix1, mix2;
+    private BufferedImage mix1;
     //A variable which is increased stepwise from 0 to 1. It is needed
     //for the computation of the convex combinations.
     private double alpha;
@@ -52,14 +51,13 @@ class ShapeInter extends TimerTask {
         Eight e = new Eight();
         e.calculateOctant(200, 200, 150);
         points = e.getCompleteList();
-
-
+        
         buffid = bid;
 
-        width = 500;
-        height = 800;
+        width = 80;
+        height = 80;
 
-        steps = 10;
+        steps = 107;
 
         deltaAlpha = 1.0 / steps;
 
@@ -472,60 +470,80 @@ class ShapeInter extends TimerTask {
 
     @Override
     public void run() {
-        while(true){
-        //Since this method is called arbitrarily often, interpolation must only
-        //be carred out while alpha is between 0 and 1.
-        if (alpha >= 0 && alpha <= 1 - deltaAlpha) {
-            //Generate the interpolated image.
+        AffineTransform transImg1;
+        AffineTransform transImg2;
+        AffineTransform intermediateTransform;
+        double[] initialMatrix = new double[6];
+        double[] finalMatrix = new double[6];
+        boolean flag = false;
+        
+        while (true) {
+            //Since this method is called arbitrarily often, interpolation must only
+            //be carred out while alpha is between 0 and 1.
+            if (alpha >= 0 && alpha <= 1 - deltaAlpha) {
+                //Generate the interpolated image.
+                
+                if (flag) {
+                    mix1 = t[15].mixWith(t[0], alpha);
+                } else {
+                    mix1 = t[i].mixWith(t[i + 1], alpha);
+                }
 
-            mix1 = t[i].mixWith(t[i + 1], alpha);
-            mix2 = t[i].mixWith(t[i + 1], (alpha + deltaAlpha));
+                //Draw the interpolated image on the BufferedImage.
+                buffid.g2dbi.setColor(Color.BLACK);
+                //buffid.g2dbi.fill(new Rectangle(0, 0, 500, 800));
 
-            //Draw the interpolated image on the BufferedImage.
-            buffid.g2dbi.setColor(Color.BLACK);
-            //buffid.g2dbi.fill(new Rectangle(0, 0, 500, 800));
+                transImg1 = new AffineTransform();
+                transImg2 = new AffineTransform();
+                if(alpha == 0){
+                    p = i*107;
+                }
+                transImg1.translate(points.get(p).x, points.get(p).y);
+                if (alpha + 2*deltaAlpha > 1){
+                    p = (i+1)*107-pointsPace;
+                }
+                transImg2.translate(points.get(p + pointsPace).x, points.get(p + pointsPace).y);
 
-            AffineTransform transImg1 = new AffineTransform();
-            AffineTransform transImg2 = new AffineTransform();
-            transImg1.translate(points.get(p).x, points.get(p).y);
-            transImg2.translate(points.get(p + pointsPace).x, points.get(p + pointsPace).y);
+                transImg1.getMatrix(initialMatrix);
+                transImg2.getMatrix(finalMatrix);
 
-            double[] initialMatrix = new double[6];
-            double[] finalMatrix = new double[6];
-            transImg1.getMatrix(initialMatrix);
-            transImg2.getMatrix(finalMatrix);
+                //System.out.println(pointsPace + "\n");
 
-            //System.out.println(pointsPace + "\n");
+                int pace = 30;
+                for (int k = 0; k < pace; k++) {
+                    //System.out.println(k + "\n");
 
-            int pace = 50;
-            for (int k = 0; k < pace; k++) {
-                //System.out.println(k + "\n");
+                    //buffid.g2dbi.fillRect(0, 0, width, height);
+                    //buffid.repaint();
+                    
+                    intermediateTransform = new AffineTransform(convexCombination(initialMatrix, finalMatrix, k / (double) pace));
+                    buffid.g2dbi.drawImage(mix1, intermediateTransform, null);
+                    //buffid.g2dbi.drawImage(mix, 50, 50, null);
 
-                buffid.g2dbi.fillRect(0, 0, width, height);
+                    //Call the method for updating the window.
+                    buffid.repaint();
+                    
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ShapeInter.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 
-                AffineTransform intermediateTransform = new AffineTransform(convexCombination(initialMatrix, finalMatrix, k / (double) pace));
-                buffid.g2dbi.drawImage(mix1, intermediateTransform, null);
-                //buffid.g2dbi.drawImage(mix, 50, 50, null);
-
-                //Call the method for updating the window.
-                buffid.repaint();
-                /*try {
-                    Thread.sleep(30);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ShapeInter.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
+                //Increment alpha.
+                alpha += deltaAlpha;
+                p += pointsPace;
+            } else {
+                if (i < 15) {
+                    i++;
+                    alpha = 0;
+                }
+                if (i == 15) {
+                    //i++;
+                    alpha = 0;
+                    flag = true;
+                }
             }
-        } else {
-            if (i < 15) {
-                i++;
-                alpha = 0;
-            }
-
-        }
-
-        //Increment alpha.
-        alpha += deltaAlpha;
-        p += pointsPace;
         }
     }
 
@@ -558,11 +576,11 @@ class ShapeInter extends TimerTask {
 
         //The window in which everything is drawn.
         BufferedImageDrawer bid = new BufferedImageDrawer(bi, width, height);
-        bid.setTitle("Transforming shape and colour");
+        bid.setTitle("Whovian Shaker");
 
         //The TimerTask in which the repeated computations for drawing take place.
         ShapeInter mcs = new ShapeInter(bid);
-        
+
         mcs.run();
 
         //Timer t = new Timer();
