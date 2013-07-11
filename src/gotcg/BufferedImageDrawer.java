@@ -1,35 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package gotcg;
 
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
-/**
- * A class for drawing a BufferedImage object. It can be used in connection with
- * double buffering.
- * 
-* @author Frank Klawonn Last change 27.05.2005
- */
 class BufferedImageDrawer extends Frame {
-    //These image is drawn when the paint method is called.
 
     public BufferedImage bi;
-    //This Graphics2D object can be used to draw on bi.
+
     public Graphics2D g2dbi;
-    //The Graphics2D object used in the paint method.
+
     private Graphics2D g2d;
 
-    /**
-     * Constructor
-     */
     public BufferedImageDrawer(BufferedImage buffIm, int width, int height) {
         bi = buffIm;
         g2dbi = bi.createGraphics();
 
-        //Enables the closing of the window.
         addWindowListener(new MyFinishWindow());
 
         this.setTitle("Double-Buffering");
