@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-
 //Grupo: Andrei Costa, Mikael Poetsch, Vinicius Pazzini
 class ShapeInter extends TimerTask {
 
@@ -23,7 +22,11 @@ class ShapeInter extends TimerTask {
     private double alpha;
     private double deltaAlpha;
     private ArrayList<Point> points;
-
+    private int i;
+    private int p;
+    private int x;
+    private int pointsPace;
+    
     public ShapeInter(BufferedImageDrawer bid) {
         Eight e = new Eight();
         e.calculateOctant(200, 200, 150);
@@ -41,6 +44,8 @@ class ShapeInter extends TimerTask {
         alpha = 0;
 
         pointsPace = (int) ((int) (points.size() / 16.0) / steps);
+        
+        TriangulatedImage.triangles = this.trianglePoints();
 
         Image loadedImage;
 
@@ -50,9 +55,6 @@ class ShapeInter extends TimerTask {
 
         Graphics2D g2dt0 = t[0].bi.createGraphics();
         
-        t[0].triangles = this.trianglePoints();
-
-
         loadedImage = new javax.swing.ImageIcon("1st.png").getImage();
         g2dt0.drawImage(loadedImage, 0, 0, null);
 
@@ -68,7 +70,6 @@ class ShapeInter extends TimerTask {
         g2dt1.drawImage(loadedImage, 0, 0, null);
 
         t[1].tPoints = this.imagePoints(1);
-        t[1].triangles = t[0].triangles;
         //--------------------------
         
         t[2] = new TriangulatedImage();
@@ -81,7 +82,6 @@ class ShapeInter extends TimerTask {
         g2dt2.drawImage(loadedImage, 0, 0, null);
 
         t[2].tPoints = this.imagePoints(2);
-        t[2].triangles = t[0].triangles;
         //--------------------------
 
         t[3] = new TriangulatedImage();
@@ -94,7 +94,6 @@ class ShapeInter extends TimerTask {
         g2dt3.drawImage(loadedImage, 0, 0, null);
 
         t[3].tPoints = this.imagePoints(3);
-        t[3].triangles = t[0].triangles;
         //--------------------------
 
         t[4] = new TriangulatedImage();
@@ -107,7 +106,6 @@ class ShapeInter extends TimerTask {
         g2dt4.drawImage(loadedImage, 0, 0, null);
 
         t[4].tPoints = this.imagePoints(4);
-        t[4].triangles = t[0].triangles;
         //--------------------------
 
 
@@ -121,7 +119,6 @@ class ShapeInter extends TimerTask {
         g2dt5.drawImage(loadedImage, 0, 0, null);
 
         t[5].tPoints = this.imagePoints(5);
-        t[5].triangles = t[0].triangles;
         //--------------------------
 
         t[6] = new TriangulatedImage();
@@ -134,7 +131,6 @@ class ShapeInter extends TimerTask {
         g2dt6.drawImage(loadedImage, 0, 0, null);
 
         t[6].tPoints = this.imagePoints(6);
-        t[6].triangles = t[0].triangles;
         //--------------------------
 
         t[7] = new TriangulatedImage();
@@ -147,7 +143,6 @@ class ShapeInter extends TimerTask {
         g2dt7.drawImage(loadedImage, 0, 0, null);
 
         t[7].tPoints = this.imagePoints(7);
-        t[7].triangles = t[0].triangles;
         //--------------------------
 
         t[8] = new TriangulatedImage();
@@ -160,7 +155,6 @@ class ShapeInter extends TimerTask {
         g2dt8.drawImage(loadedImage, 0, 0, null);
 
         t[8].tPoints = this.imagePoints(8);
-        t[8].triangles = t[0].triangles;
         //--------------------------
 
         t[9] = new TriangulatedImage();
@@ -173,7 +167,6 @@ class ShapeInter extends TimerTask {
         g2dt9.drawImage(loadedImage, 0, 0, null);
 
         t[9].tPoints = this.imagePoints(9);
-        t[9].triangles = t[0].triangles;
         //--------------------------
 
         t[10] = new TriangulatedImage();
@@ -186,7 +179,6 @@ class ShapeInter extends TimerTask {
         g2dt10.drawImage(loadedImage, 0, 0, null);
 
         t[10].tPoints = this.imagePoints(10);
-        t[10].triangles = t[0].triangles;
         //--------------------------
 
         t[11] = new TriangulatedImage();
@@ -199,7 +191,6 @@ class ShapeInter extends TimerTask {
         g2dt11.drawImage(loadedImage, 0, 0, null);
 
         t[11].tPoints = this.imagePoints(11);
-        t[11].triangles = t[0].triangles;
         //--------------------------
 
         t[12] = new TriangulatedImage();
@@ -212,7 +203,6 @@ class ShapeInter extends TimerTask {
         g2dt12.drawImage(loadedImage, 0, 0, null);
 
         t[12].tPoints = this.imagePoints(12);
-        t[12].triangles = t[0].triangles;
         //--------------------------
 
         t[13] = new TriangulatedImage();
@@ -225,7 +215,6 @@ class ShapeInter extends TimerTask {
         g2dt13.drawImage(loadedImage, 0, 0, null);
 
         t[13].tPoints = this.imagePoints(13);
-        t[13].triangles = t[0].triangles;
         //--------------------------
 
         t[14] = new TriangulatedImage();
@@ -238,7 +227,6 @@ class ShapeInter extends TimerTask {
         g2dt14.drawImage(loadedImage, 0, 0, null);
 
         t[14].tPoints = this.imagePoints(14);
-        t[14].triangles = t[0].triangles;
         //--------------------------
 
         t[15] = new TriangulatedImage();
@@ -251,15 +239,7 @@ class ShapeInter extends TimerTask {
         g2dt15.drawImage(loadedImage, 0, 0, null);
 
         t[15].tPoints = this.imagePoints(15);
-        t[15].triangles = t[0].triangles;
-        //--------------------------
-
     }
-
-    int i = 0;
-    int p = 0;
-    int x = 0;
-    int pointsPace;
 
     @Override
     public void run() {
@@ -275,7 +255,7 @@ class ShapeInter extends TimerTask {
                 if (flag) {
                     mix1 = t[15].mixWith(t[0], alpha);
                 } else {
-                    mix1 = t[i].mixWith(t[i + 1], alpha);
+                    mix1 = t[i].mixWith(t[i+1], alpha);
                 }
 
                 transImg1 = new AffineTransform();
@@ -283,15 +263,17 @@ class ShapeInter extends TimerTask {
                 if(alpha == 0){
                     p = i*107;
                 }
+                
                 transImg1.translate(points.get(p).x, points.get(p).y);
+                
                 if (alpha + 2*deltaAlpha > 1){
                     p = (i+1)*107-pointsPace;
                 }
                 if(p+pointsPace >= points.size()){
                     break;
                 }
+                
                 transImg2.translate(points.get(p + pointsPace).x, points.get(p + pointsPace).y);
-
                 transImg1.getMatrix(initialMatrix);
                 transImg2.getMatrix(finalMatrix);
 
@@ -301,17 +283,17 @@ class ShapeInter extends TimerTask {
                     buffid.g2dbi.drawImage(mix1, intermediateTransform, null);
                     buffid.repaint();                    
                 }
+                
                 alpha += deltaAlpha;
                 p += pointsPace;
             } else {
                 if (i < 15) {
                     i++;
-                    alpha = 0;
                 }
                 if (i == 15) {
-                    alpha = 0;
                     flag = true;
                 }
+                alpha = 0;
             }
         }
     }
@@ -330,7 +312,6 @@ class ShapeInter extends TimerTask {
     }
 
     public static void main(String args[]) {
-
         int width = 600;
         int height = 1000;
 
@@ -368,12 +349,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(58, 63);
-                _2dpoints[5] = new Point2D.Double(91, 62);
+                _2dpoints[4] = new Point2D.Double(46, 97);
+                _2dpoints[5] = new Point2D.Double(96, 96);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(77, 82);
-                _2dpoints[8] = new Point2D.Double(61, 102);
-                _2dpoints[9] = new Point2D.Double(93, 103);
+                _2dpoints[7] = new Point2D.Double(66, 140);
+                _2dpoints[8] = new Point2D.Double(53, 154);
+                _2dpoints[9] = new Point2D.Double(89, 154);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -400,12 +381,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(65, 73);
-                _2dpoints[5] = new Point2D.Double(99, 75);
+                _2dpoints[4] = new Point2D.Double(64, 96);
+                _2dpoints[5] = new Point2D.Double(106, 99);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(82, 95);
-                _2dpoints[8] = new Point2D.Double(64, 114);
-                _2dpoints[9] = new Point2D.Double(99, 116);
+                _2dpoints[7] = new Point2D.Double(88, 135);
+                _2dpoints[8] = new Point2D.Double(66, 143);
+                _2dpoints[9] = new Point2D.Double(100, 144);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -432,12 +413,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(78, 73);
-                _2dpoints[5] = new Point2D.Double(108, 75);
+                _2dpoints[4] = new Point2D.Double(49, 87);
+                _2dpoints[5] = new Point2D.Double(89, 84);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(100, 93);
-                _2dpoints[8] = new Point2D.Double(73, 105);
-                _2dpoints[9] = new Point2D.Double(106, 108);
+                _2dpoints[7] = new Point2D.Double(66, 106);
+                _2dpoints[8] = new Point2D.Double(56, 132);
+                _2dpoints[9] = new Point2D.Double(90, 127);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -448,12 +429,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(56, 73);
-                _2dpoints[5] = new Point2D.Double(93, 74);
+                _2dpoints[4] = new Point2D.Double(51, 96);
+                _2dpoints[5] = new Point2D.Double(91, 92);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(76, 93);
-                _2dpoints[8] = new Point2D.Double(61, 111);
-                _2dpoints[9] = new Point2D.Double(92, 112);
+                _2dpoints[7] = new Point2D.Double(77, 121);
+                _2dpoints[8] = new Point2D.Double(64, 143);
+                _2dpoints[9] = new Point2D.Double(95, 139);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -464,12 +445,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(61, 71);
-                _2dpoints[5] = new Point2D.Double(83, 71);
+                _2dpoints[4] = new Point2D.Double(58, 80);
+                _2dpoints[5] = new Point2D.Double(99, 82);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(73, 85);
-                _2dpoints[8] = new Point2D.Double(63, 100);
-                _2dpoints[9] = new Point2D.Double(84, 99);
+                _2dpoints[7] = new Point2D.Double(88, 102);
+                _2dpoints[8] = new Point2D.Double(59, 127);
+                _2dpoints[9] = new Point2D.Double(96, 128);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -480,12 +461,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(52, 76);
-                _2dpoints[5] = new Point2D.Double(87, 75);
+                _2dpoints[4] = new Point2D.Double(54, 83);
+                _2dpoints[5] = new Point2D.Double(98, 81);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(71, 99);
-                _2dpoints[8] = new Point2D.Double(56, 116);
-                _2dpoints[9] = new Point2D.Double(88, 114);
+                _2dpoints[7] = new Point2D.Double(78, 114);
+                _2dpoints[8] = new Point2D.Double(62, 135);
+                _2dpoints[9] = new Point2D.Double(99, 133);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -512,12 +493,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(40, 80);
-                _2dpoints[5] = new Point2D.Double(75, 80);
+                _2dpoints[4] = new Point2D.Double(56, 102);
+                _2dpoints[5] = new Point2D.Double(103, 106);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(57, 103);
-                _2dpoints[8] = new Point2D.Double(46, 115);
-                _2dpoints[9] = new Point2D.Double(71, 115);
+                _2dpoints[7] = new Point2D.Double(75, 140);
+                _2dpoints[8] = new Point2D.Double(60, 152);
+                _2dpoints[9] = new Point2D.Double(90, 156);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -528,12 +509,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(54, 58);
-                _2dpoints[5] = new Point2D.Double(83, 60);
+                _2dpoints[4] = new Point2D.Double(46, 94);
+                _2dpoints[5] = new Point2D.Double(90, 98);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(59, 77);
-                _2dpoints[8] = new Point2D.Double(51, 96);
-                _2dpoints[9] = new Point2D.Double(77, 97);
+                _2dpoints[7] = new Point2D.Double(68, 134);
+                _2dpoints[8] = new Point2D.Double(50, 154);
+                _2dpoints[9] = new Point2D.Double(88, 149);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -544,12 +525,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(40, 73);
-                _2dpoints[5] = new Point2D.Double(71, 69);
+                _2dpoints[4] = new Point2D.Double(48, 72);
+                _2dpoints[5] = new Point2D.Double(100, 72);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(56, 90);
-                _2dpoints[8] = new Point2D.Double(51, 109);
-                _2dpoints[9] = new Point2D.Double(69, 107);
+                _2dpoints[7] = new Point2D.Double(74, 107);
+                _2dpoints[8] = new Point2D.Double(58, 132);
+                _2dpoints[9] = new Point2D.Double(95, 132);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -560,12 +541,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(45, 75);
-                _2dpoints[5] = new Point2D.Double(79, 81);
+                _2dpoints[4] = new Point2D.Double(52, 88);
+                _2dpoints[5] = new Point2D.Double(99, 86);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(54, 92);
-                _2dpoints[8] = new Point2D.Double(43, 112);
-                _2dpoints[9] = new Point2D.Double(73, 116);
+                _2dpoints[7] = new Point2D.Double(80, 112);
+                _2dpoints[8] = new Point2D.Double(64, 138);
+                _2dpoints[9] = new Point2D.Double(96, 134);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -576,12 +557,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(63, 73);
-                _2dpoints[5] = new Point2D.Double(96, 74);
+                _2dpoints[4] = new Point2D.Double(52, 82);
+                _2dpoints[5] = new Point2D.Double(103, 78);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(81, 92);
-                _2dpoints[8] = new Point2D.Double(65, 106);
-                _2dpoints[9] = new Point2D.Double(92, 109);
+                _2dpoints[7] = new Point2D.Double(86, 109);
+                _2dpoints[8] = new Point2D.Double(61, 130);
+                _2dpoints[9] = new Point2D.Double(102, 127);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -592,12 +573,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(30, 68);
-                _2dpoints[5] = new Point2D.Double(64, 65);
+                _2dpoints[4] = new Point2D.Double(39, 84);
+                _2dpoints[5] = new Point2D.Double(80, 80);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(50, 90);
-                _2dpoints[8] = new Point2D.Double(42, 107);
-                _2dpoints[9] = new Point2D.Double(62, 104);
+                _2dpoints[7] = new Point2D.Double(57, 110);
+                _2dpoints[8] = new Point2D.Double(50, 131);
+                _2dpoints[9] = new Point2D.Double(76, 129);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);
@@ -608,12 +589,12 @@ class ShapeInter extends TimerTask {
                 _2dpoints[1] = new Point2D.Double(75, 0);
                 _2dpoints[2] = new Point2D.Double(150, 0);
                 _2dpoints[3] = new Point2D.Double(0, 100);
-                _2dpoints[4] = new Point2D.Double(48, 78);
-                _2dpoints[5] = new Point2D.Double(87, 79);
+                _2dpoints[4] = new Point2D.Double(57, 87);
+                _2dpoints[5] = new Point2D.Double(104, 83);
                 _2dpoints[6] = new Point2D.Double(150, 100);
-                _2dpoints[7] = new Point2D.Double(62, 103);
-                _2dpoints[8] = new Point2D.Double(48, 126);
-                _2dpoints[9] = new Point2D.Double(78, 130);
+                _2dpoints[7] = new Point2D.Double(75, 115);
+                _2dpoints[8] = new Point2D.Double(62, 137);
+                _2dpoints[9] = new Point2D.Double(96, 138);
                 _2dpoints[10] = new Point2D.Double(0, 200);
                 _2dpoints[11] = new Point2D.Double(75, 200);
                 _2dpoints[12] = new Point2D.Double(150, 200);

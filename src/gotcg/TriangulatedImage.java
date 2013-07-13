@@ -9,7 +9,7 @@ public class TriangulatedImage {
     BufferedImage bi;
     Point2D[] tPoints;
 
-    int[][] triangles;
+    static int[][] triangles;
 
     public static double[] triangleCoordinates(Point2D v, Point2D[] triangle) {
         double[] result = new double[3];
