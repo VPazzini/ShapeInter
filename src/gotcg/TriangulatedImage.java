@@ -72,11 +72,8 @@ public class TriangulatedImage {
                     + alpha * ti.tPoints[i].getY());
         }
 
-        mix.triangles = this.triangles;
-
         int rgbValueThis;
         int rgbValueTi;
-        int rgbValueMix;
         Color thisColour;
         Color tiColour;
         Color pixelColour;
@@ -87,7 +84,7 @@ public class TriangulatedImage {
         int yInt;
         double[] t = new double[3];
         double aux;
-        Point2D[] threePoints = new Point2D[3];;
+        Point2D[] threePoints = new Point2D[3];
         Point2D.Double pixel = new Point2D.Double();
         int tNo;
         boolean notFound;
@@ -99,11 +96,11 @@ public class TriangulatedImage {
                 tNo = 0;
 
                 notFound = true;
-                while (tNo < mix.triangles.length && notFound) {
+                while (tNo < TriangulatedImage.triangles.length && notFound) {
 
-                    for (int k = 0; k < 3; k++) {
-                        threePoints[k] = mix.tPoints[mix.triangles[tNo][k]];
-                    }
+                    threePoints[0] = mix.tPoints[TriangulatedImage.triangles[tNo][0]];
+                    threePoints[1] = mix.tPoints[TriangulatedImage.triangles[tNo][1]];
+                    threePoints[2] = mix.tPoints[TriangulatedImage.triangles[tNo][2]];
 
                     t = triangleCoordinates(pixel, threePoints);
 
@@ -115,18 +112,18 @@ public class TriangulatedImage {
                 }
 
                 if (!notFound) {
-                    aux = 0;
-                    for (int k = 0; k < 3; k++) {
-                        aux = aux + t[k] * this.tPoints[this.triangles[tNo][k]].getX();
-                    }
+                    aux = t[0] * this.tPoints[TriangulatedImage.triangles[tNo][0]].getX();
+                    aux = aux + t[1] * this.tPoints[TriangulatedImage.triangles[tNo][1]].getX();
+                    aux = aux + t[2] * this.tPoints[TriangulatedImage.triangles[tNo][2]].getX();
+                    
                     xInt = (int) Math.round(aux);
                     xInt = Math.max(0, xInt);
                     xInt = Math.min(this.bi.getWidth() - 1, xInt);
-
-                    aux = 0;
-                    for (int k = 0; k < 3; k++) {
-                        aux = aux + t[k] * this.tPoints[this.triangles[tNo][k]].getY();
-                    }
+                    
+                    aux = t[0] * this.tPoints[TriangulatedImage.triangles[tNo][0]].getY();
+                    aux = aux + t[1] * this.tPoints[TriangulatedImage.triangles[tNo][1]].getY();
+                    aux = aux + t[2] * this.tPoints[TriangulatedImage.triangles[tNo][2]].getY();
+                    
                     yInt = (int) Math.round(aux);
                     yInt = Math.max(0, yInt);
                     yInt = Math.min(this.bi.getHeight() - 1, yInt);
@@ -134,16 +131,14 @@ public class TriangulatedImage {
                     rgbValueThis = this.bi.getRGB(xInt, yInt);
                     thisColour = new Color(rgbValueThis);
 
-                    aux = 0;
-                    for (int k = 0; k < 3; k++) {
-                        aux = aux + t[k] * ti.tPoints[ti.triangles[tNo][k]].getX();
-                    }
+                    aux = t[0] * ti.tPoints[TriangulatedImage.triangles[tNo][0]].getX();
+                    aux = aux + t[1] * ti.tPoints[TriangulatedImage.triangles[tNo][1]].getX();
+                    aux = aux + t[2] * ti.tPoints[TriangulatedImage.triangles[tNo][2]].getX();
                     xInt = (int) Math.round(aux);
 
-                    aux = 0;
-                    for (int k = 0; k < 3; k++) {
-                        aux = aux + t[k] * ti.tPoints[ti.triangles[tNo][k]].getY();
-                    }
+                    aux = t[0] * ti.tPoints[TriangulatedImage.triangles[tNo][0]].getY();
+                    aux = aux + t[1] * ti.tPoints[TriangulatedImage.triangles[tNo][1]].getY();
+                    aux = aux + t[2] * ti.tPoints[TriangulatedImage.triangles[tNo][2]].getY();
                     yInt = (int) Math.round(aux);
 
                     rgbValueTi = ti.bi.getRGB(xInt, yInt);
@@ -157,11 +152,10 @@ public class TriangulatedImage {
 
                     bMix = (int) Math.round((1 - alpha) * thisColour.getBlue()
                             + alpha * tiColour.getBlue());
+                    
                     pixelColour = new Color(rMix, gMix, bMix);
                     mix.bi.setRGB(i, j, pixelColour.getRGB());
-
                 }
-
             }
         }
         return (mix.bi);
