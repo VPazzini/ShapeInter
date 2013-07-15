@@ -1,9 +1,6 @@
 package gotcg;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -16,8 +13,6 @@ class ShapeInter {
     private int steps;
     private TriangulatedImage t[] = new TriangulatedImage[16];
     private ArrayList<Point> points;
-    private int i;
-    private int x;
 
     public ShapeInter(BufferedImageDrawer bid) {
         Eight e = new Eight();
@@ -28,8 +23,7 @@ class ShapeInter {
 
         width = 150;
         height = 200;
-
-        steps = 100;
+        steps = 60;
 
         startImages();
     }

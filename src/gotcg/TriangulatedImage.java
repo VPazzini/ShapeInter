@@ -21,7 +21,7 @@ public class TriangulatedImage {
     
     public TriangulatedImage(){}
 
-    public static double[] triangleCoordinates(Point2D v, Point2D[] triangle) {
+    private static double[] triangleCoordinates(Point2D v, Point2D[] triangle) {
         double[] result = new double[3];
 
         double d13x = triangle[0].getX() - triangle[2].getX();
@@ -46,7 +46,7 @@ public class TriangulatedImage {
         return (result);
     }
 
-    public static boolean isConvexCombination(double[] t) {
+    private static boolean isConvexCombination(double[] t) {
         boolean result;
         double sum;
 
