@@ -107,7 +107,7 @@ class ShapeInter {
     }
 
     private int[][] trianglePoints() {
-        int[][] tri = new int[20][3];
+        int[][] tri = new int[16][3];
 
         tri[0][0] = 0;
         tri[0][1] = 4;
@@ -141,11 +141,11 @@ class ShapeInter {
         tri[7][1] = 8;
         tri[7][2] = 10;
 
-        tri[8][0] = 13;
+        tri[8][0] = 3;
         tri[8][1] = 7;
         tri[8][2] = 8;
 
-        tri[9][0] = 13;
+        tri[9][0] = 3;
         tri[9][1] = 4;
         tri[9][2] = 7;
 
@@ -158,11 +158,11 @@ class ShapeInter {
         tri[11][2] = 7;
 
         tri[12][0] = 5;
-        tri[12][1] = 14;
+        tri[12][1] = 6;
         tri[12][2] = 7;
 
         tri[13][0] = 9;
-        tri[13][1] = 14;
+        tri[13][1] = 6;
         tri[13][2] = 7;
 
         tri[14][0] = 7;
@@ -172,22 +172,6 @@ class ShapeInter {
         tri[15][0] = 7;
         tri[15][1] = 8;
         tri[15][2] = 11;
-
-        tri[16][0] = 3;
-        tri[16][1] = 4;
-        tri[16][2] = 13;
-        
-        tri[17][0] = 3;
-        tri[17][1] = 8;
-        tri[17][2] = 13;
-        
-        tri[18][0] = 6;
-        tri[18][1] = 5;
-        tri[18][2] = 14;
-        
-        tri[19][0] = 6;
-        tri[19][1] = 9;
-        tri[19][2] = 14;
         
         return tri;
     }

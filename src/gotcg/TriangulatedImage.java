@@ -172,7 +172,7 @@ public class TriangulatedImage {
     }
     
     private Point2D[] imagePoints(int image) {
-        Point2D[] _2dpoints = new Point2D[15];
+        Point2D[] _2dpoints = new Point2D[13];
         //posicoes do array
         _2dpoints[0] = new Point2D.Double(0, 0);//[0]canto superior esquerdo
         _2dpoints[1] = new Point2D.Double(75, 0);//[1]meio superior
@@ -187,8 +187,6 @@ public class TriangulatedImage {
         _2dpoints[10] = new Point2D.Double(0, 200);//[10]canto inferior esquerdo
         _2dpoints[11] = new Point2D.Double(75, 200);//[11]meio inferior
         _2dpoints[12] = new Point2D.Double(150, 200);//[12]canto inferior direito
-        //[13]orelha esquerda
-        //[14]orelha direita
         
         switch (image) {
             case 0:
@@ -198,8 +196,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(66, 140);
                 _2dpoints[8] = new Point2D.Double(53, 154);
                 _2dpoints[9] = new Point2D.Double(89, 154);
-                _2dpoints[13] = new Point2D.Double(23, 102);
-                _2dpoints[14] = new Point2D.Double(122, 105);
                 break;
             case 1:
                 //2nd doctor
@@ -208,8 +204,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(75, 124);
                 _2dpoints[8] = new Point2D.Double(55, 148);
                 _2dpoints[9] = new Point2D.Double(97, 143);
-                _2dpoints[13] = new Point2D.Double(32, 113);
-                _2dpoints[14] = new Point2D.Double(119, 119);
                 break;
             case 2:
                 //3rd doctor
@@ -218,8 +212,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(55, 111);
                 _2dpoints[8] = new Point2D.Double(45, 128);
                 _2dpoints[9] = new Point2D.Double(81, 128);
-                _2dpoints[13] = new Point2D.Double(31, 100);
-                _2dpoints[14] = new Point2D.Double(115, 105);
                 break;
             case 3:
                 //4th doctor
@@ -228,8 +220,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(83, 113);
                 _2dpoints[8] = new Point2D.Double(58, 136);
                 _2dpoints[9] = new Point2D.Double(102, 133);
-                _2dpoints[13] = new Point2D.Double(28, 122);
-                _2dpoints[14] = new Point2D.Double(121, 115);
                 break;
             case 4:
                 //5th doctor
@@ -238,8 +228,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(66, 106);
                 _2dpoints[8] = new Point2D.Double(56, 132);
                 _2dpoints[9] = new Point2D.Double(90, 127);
-                _2dpoints[13] = new Point2D.Double(31, 109);
-                _2dpoints[14] = new Point2D.Double(122, 97);
                 break;
             case 5:
                 //6th doctor
@@ -248,8 +236,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(77, 121);
                 _2dpoints[8] = new Point2D.Double(64, 143);
                 _2dpoints[9] = new Point2D.Double(95, 139);
-                _2dpoints[13] = new Point2D.Double(31, 113);
-                _2dpoints[14] = new Point2D.Double(121, 104);
                 break;
             case 6:
                 //7th doctor
@@ -258,8 +244,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(88, 102);
                 _2dpoints[8] = new Point2D.Double(59, 127);
                 _2dpoints[9] = new Point2D.Double(96, 128);
-                _2dpoints[13] = new Point2D.Double(26, 105);
-                _2dpoints[14] = new Point2D.Double(123, 109);
                 break;
             case 7:
                 //8th doctor
@@ -268,8 +252,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(78, 114);
                 _2dpoints[8] = new Point2D.Double(62, 135);
                 _2dpoints[9] = new Point2D.Double(99, 133);
-                _2dpoints[13] = new Point2D.Double(35, 107);
-                _2dpoints[14] = new Point2D.Double(119, 101);
                 break;
             case 8:
                 //9th doctor
@@ -278,8 +260,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(104, 124);
                 _2dpoints[8] = new Point2D.Double(77, 138);
                 _2dpoints[9] = new Point2D.Double(111, 133);
-                _2dpoints[13] = new Point2D.Double(30, 111);
-                _2dpoints[14] = new Point2D.Double(124, 109);
                 break;
             case 9:
                 //10th doctor
@@ -288,8 +268,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(75, 140);
                 _2dpoints[8] = new Point2D.Double(60, 152);
                 _2dpoints[9] = new Point2D.Double(90, 156);
-                _2dpoints[13] = new Point2D.Double(27, 104);
-                _2dpoints[14] = new Point2D.Double(125, 114);
                 break;
             case 10:
                 //11th doctor
@@ -298,8 +276,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(68, 134);
                 _2dpoints[8] = new Point2D.Double(50, 154);
                 _2dpoints[9] = new Point2D.Double(88, 149);
-                _2dpoints[13] = new Point2D.Double(27, 105);
-                _2dpoints[14] = new Point2D.Double(123, 105);
                 break;
             case 11:
                 //amy pond
@@ -308,8 +284,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(74, 107);
                 _2dpoints[8] = new Point2D.Double(58, 132);
                 _2dpoints[9] = new Point2D.Double(95, 132);
-                _2dpoints[13] = new Point2D.Double(24, 97);
-                _2dpoints[14] = new Point2D.Double(130, 96);
                 break;
             case 12:
                 //clara oswald
@@ -318,8 +292,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(80, 112);
                 _2dpoints[8] = new Point2D.Double(64, 138);
                 _2dpoints[9] = new Point2D.Double(96, 134);
-                _2dpoints[13] = new Point2D.Double(29, 106);
-                _2dpoints[14] = new Point2D.Double(121, 108);
                 break;
             case 13:
                 //river song
@@ -328,8 +300,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(86, 109);
                 _2dpoints[8] = new Point2D.Double(61, 130);
                 _2dpoints[9] = new Point2D.Double(102, 127);
-                _2dpoints[13] = new Point2D.Double(25, 102);
-                _2dpoints[14] = new Point2D.Double(122, 97);
                 break;
             case 14:
                 //rory pond
@@ -338,8 +308,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(57, 110);
                 _2dpoints[8] = new Point2D.Double(50, 131);
                 _2dpoints[9] = new Point2D.Double(76, 129);
-                _2dpoints[13] = new Point2D.Double(28, 100);
-                _2dpoints[14] = new Point2D.Double(118, 93);
                 break;
             case 15:
                 //rory's dad
@@ -348,8 +316,6 @@ public class TriangulatedImage {
                 _2dpoints[7] = new Point2D.Double(75, 115);
                 _2dpoints[8] = new Point2D.Double(62, 137);
                 _2dpoints[9] = new Point2D.Double(96, 138);
-                _2dpoints[13] = new Point2D.Double(38, 107);
-                _2dpoints[14] = new Point2D.Double(129, 109);
                 break;
         }
         return _2dpoints;
