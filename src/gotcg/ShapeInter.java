@@ -3,6 +3,8 @@ package gotcg;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //Grupo: Andrei Costa, Mikael Poetsch, Vinicius Pazzini
 class ShapeInter {
@@ -11,18 +13,19 @@ class ShapeInter {
     private int height;
     private int steps;
     private TriangulatedImage t[] = new TriangulatedImage[16];
+    private BufferedImage cleaner;
     private ArrayList<Point> points;
 
     public ShapeInter(BufferedImageDrawer bid) {
         Eight e = new Eight();
-        e.calculateOctant(200, 200, 100);
+        e.calculateOctant(200, 200, 250);
         points = e.getCompleteList();
 
         buffid = bid;
 
         width = 150;
         height = 200;
-        steps = 20;
+        steps = 30;
 
         startImages();
     }
@@ -46,26 +49,27 @@ class ShapeInter {
         t[13] = new TriangulatedImage(width, height, "river.png", 13);
         t[14] = new TriangulatedImage(width, height, "rory.png", 14);
         t[15] = new TriangulatedImage(width, height, "rory\'s dad.png", 15);
+        
+        this.cleaner = new BufferedImage(600, 1000, BufferedImage.TYPE_3BYTE_BGR);
     }
 
     public void run() {
-        TriangulatedImage a, b;
         Point pointA, pointB;
-        int nextImage;
+        int nextImage = 0;
         double step = (double) points.size() / 16;
 
         for (int thisImage = 0; thisImage < 16; thisImage++) {
 
-            if (thisImage == 15) {
-                nextImage = 0;
-            } else {
-                nextImage = thisImage + 1;
-            }
-
-            a = t[thisImage];
             pointA = points.get((int) (thisImage * step));
-            b = t[nextImage];
-            pointB = points.get((int) (nextImage * step));
+            
+            if (thisImage == 15){
+                nextImage = 0;
+                pointB = points.get(nextImage);
+            }
+            else{
+                nextImage += 1;
+                pointB = points.get((int) (nextImage * step));
+            }
 
             for (int j = 0; j < steps; j++) {
                 double alpha = (double) j / steps;
@@ -73,8 +77,19 @@ class ShapeInter {
                 int pointX = (int) ((1 - alpha) * pointA.x + alpha * pointB.x);
                 int pointY = (int) ((1 - alpha) * pointA.y + alpha * pointB.y);
 
-                buffid.g2dbi.drawImage(a.mixWith(b, alpha), pointX, pointY, null);
-                buffid.repaint();
+                if (steps < 30) {
+                    buffid.g2dbi.drawImage(cleaner, null, 0, 0);
+                    buffid.g2dbi.drawImage(t[thisImage].mixWith(t[nextImage], alpha), pointX, pointY, null);
+                    buffid.repaint();
+                    try {
+                        Thread.sleep(15);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ShapeInter.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    buffid.g2dbi.drawImage(t[thisImage].mixWith(t[nextImage], alpha), pointX, pointY, null);
+                    buffid.repaint();
+                }
             }
         }
     }
