@@ -184,11 +184,11 @@ public class TriangulatedImage {
         switch (image) {
             case 0:
                 //1st doctor
-                _2dpoints[2] = new Point2D.Double(72, 42);
-                _2dpoints[3] = new Point2D.Double(49, 24);
-                _2dpoints[4] = new Point2D.Double(105, 32);
-                _2dpoints[5] = new Point2D.Double(27, 53);
-                _2dpoints[6] = new Point2D.Double(115, 61);
+                _2dpoints[2] = new Point2D.Double(67, 75);
+                _2dpoints[3] = new Point2D.Double(45, 63);
+                _2dpoints[4] = new Point2D.Double(99, 62);
+                _2dpoints[5] = new Point2D.Double(27, 73);
+                _2dpoints[6] = new Point2D.Double(115, 73);
                 _2dpoints[7] = new Point2D.Double(36, 98);
                 _2dpoints[8] = new Point2D.Double(48, 93);
                 _2dpoints[9] = new Point2D.Double(58, 101);

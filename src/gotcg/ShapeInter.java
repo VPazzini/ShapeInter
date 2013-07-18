@@ -51,21 +51,19 @@ class ShapeInter {
     public void run() {
         TriangulatedImage a, b;
         Point pointA, pointB;
-        int nextImage;
+        int nextImage = 0;
         double step = (double) points.size() / 16;
 
         for (int thisImage = 0; thisImage < 16; thisImage++) {
-
+            pointA = points.get((int) (thisImage * step));
+            
             if (thisImage == 15) {
                 nextImage = 0;
+                pointB = points.get(0);
             } else {
-                nextImage = thisImage + 1;
+                nextImage += 1;
+                pointB = points.get((int) (nextImage * step));
             }
-
-            a = t[thisImage];
-            pointA = points.get((int) (thisImage * step));
-            b = t[nextImage];
-            pointB = points.get((int) (nextImage * step));
 
             for (int j = 0; j < steps; j++) {
                 double alpha = (double) j / steps;
@@ -73,7 +71,7 @@ class ShapeInter {
                 int pointX = (int) ((1 - alpha) * pointA.x + alpha * pointB.x);
                 int pointY = (int) ((1 - alpha) * pointA.y + alpha * pointB.y);
 
-                buffid.g2dbi.drawImage(a.mixWith(b, alpha), pointX, pointY, null);
+                buffid.g2dbi.drawImage(t[thisImage].mixWith(t[nextImage], alpha), pointX, pointY, null);
                 buffid.repaint();
             }
         }
