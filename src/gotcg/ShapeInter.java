@@ -12,25 +12,35 @@ class ShapeInter {
     private int width;
     private int height;
     private int steps;
+    private int delay;
+    private int radius;
     private TriangulatedImage t[] = new TriangulatedImage[16];
     private BufferedImage cleaner;
     private ArrayList<Point> points;
 
     public ShapeInter(BufferedImageDrawer bid) {
-        Eight e = new Eight();
-        e.calculateOctant(200, 200, 250);
-        points = e.getCompleteList();
 
         buffid = bid;
 
         width = 150;
         height = 200;
-        steps = 30;
+        
+        this.steps = 30;
+        this.delay = 0;
+        this.radius = 150;
+        
+        if(this.steps < 30){
+            this.delay = 15;
+        }
 
-        startImages();
+        start();
     }
 
-    private void startImages() {
+    private void start() {
+        Eight e = new Eight();
+        e.calculateOctant(radius+50, radius+50, radius);
+        this.points = e.getCompleteList();
+        
         TriangulatedImage.triangles = this.trianglePoints();
 
         t[0] = new TriangulatedImage(width, height, "1st.png", 0);
@@ -49,7 +59,7 @@ class ShapeInter {
         t[13] = new TriangulatedImage(width, height, "river.png", 13);
         t[14] = new TriangulatedImage(width, height, "rory.png", 14);
         t[15] = new TriangulatedImage(width, height, "rory\'s dad.png", 15);
-        
+
         this.cleaner = new BufferedImage(600, 1000, BufferedImage.TYPE_3BYTE_BGR);
     }
 
@@ -61,12 +71,11 @@ class ShapeInter {
         for (int thisImage = 0; thisImage < 16; thisImage++) {
 
             pointA = points.get((int) (thisImage * step));
-            
-            if (thisImage == 15){
+
+            if (thisImage == 15) {
                 nextImage = 0;
                 pointB = points.get(nextImage);
-            }
-            else{
+            } else {
                 nextImage += 1;
                 pointB = points.get((int) (nextImage * step));
             }
@@ -79,16 +88,16 @@ class ShapeInter {
 
                 if (steps < 30) {
                     buffid.g2dbi.drawImage(cleaner, null, 0, 0);
-                    buffid.g2dbi.drawImage(t[thisImage].mixWith(t[nextImage], alpha), pointX, pointY, null);
-                    buffid.repaint();
+                }
+                buffid.g2dbi.drawImage(t[thisImage].mixWith(t[nextImage], alpha), pointX, pointY, null);
+                buffid.repaint();
+
+                if (this.delay > 0) {
                     try {
-                        Thread.sleep(15);
+                        Thread.sleep(this.delay);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ShapeInter.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
-                    buffid.g2dbi.drawImage(t[thisImage].mixWith(t[nextImage], alpha), pointX, pointY, null);
-                    buffid.repaint();
                 }
             }
         }
@@ -187,7 +196,7 @@ class ShapeInter {
         tri[15][0] = 7;
         tri[15][1] = 8;
         tri[15][2] = 11;
-        
+
         return tri;
     }
 }
